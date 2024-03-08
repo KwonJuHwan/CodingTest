@@ -3,33 +3,36 @@ from collections import Counter
 
 def solution(gems):
     gem_list = set(gems)
-    len_gems = len(gem_list)
-    left, right = 0, 0
     gem_dict = {gems[0]: 1}
-    answer = [0, len(gems)-1]
-    while left < len(gems) and right < len(gems):
-        # 모든 보석을 포함 한다면
-        if len(gem_dict) == len_gems:
-            # 최소 길이 라면
+    gem_len = len(gem_list)
+    left, right = 0, 0
+    ## 전체 길이로 초기화
+    answer = [0, len(gems) - 1]
+    while left <= right and right < len(gems):
+        # 모든 보석을 가지고 있는 경우
+        if len(gem_dict) >= gem_len:
+            # 현재 갱신중인 최소 길이보다 짧을 때 -> 업데이트
             if right - left < answer[1] - answer[0]:
                 answer = [left, right]
-            # 아니면 left 올려서 최소 길이 탐색
-            else:
-                gem_dict[gems[left]] -= 1
-                if gem_dict[gems[left]] == 0:
-                    del gem_dict[gems[left]]
-                left += 1
+
+            # 최소 길이를 찾기 위한, 앞쪽 보석 구매 X
+            gem_dict[gems[left]] -= 1
+            if gem_dict[gems[left]] <= 0:
+                del gem_dict[gems[left]]
+            left += 1
+        # 보석 구매
         else:
             right += 1
-            # index over 방지
-            if right == len(gems):
+            # 더 이상 추가할 보석이 없을 경우
+            if right >= len(gems):
                 break
-            # dictionary에 있으면 개수 늘리기
-            if gems[right] in gem_dict:
+            # 추가할 보석이 이미 가지고 있는 경우
+            if gems[right] in gem_dict.keys():
                 gem_dict[gems[right]] += 1
-            # 없으면 최초 초기화
+            # 없으면 초기화
             else:
                 gem_dict[gems[right]] = 1
+
     return [answer[0] + 1, answer[1] + 1]
 
 
