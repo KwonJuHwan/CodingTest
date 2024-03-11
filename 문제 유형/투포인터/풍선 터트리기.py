@@ -10,19 +10,19 @@
 
 import sys
 
+import sys
 def solution(a):
     result = [False for _ in range(len(a))]
     left_min = sys.maxsize
     right_min = sys.maxsize
     for i in range(len(a)):
         if a[i] < right_min:
-            result[i] = True
             right_min = a[i]
-        if a[-1-i] < left_min:
             result[i] = True
+        if a[-1-i] < left_min:
             left_min = a[-1-i]
+            result[-1-i] = True
     return sum(result)
-
 
 
 print(solution([9, -1, -5]))
